@@ -15,16 +15,22 @@ class TopController < ApplicationController
 
   def show
     agent = Mechanize.new
-    page = agent.get('http://maxdelivery.com')
+    page = agent.get('http://kosei-do.com/free_fortune_telling/select_uranai_type.php')
 
-    form = page.form('SearchForm')
-    form.searchString = "ham"
+    form = page.form('fm_basic')
+    # form = page.form('fm_relation')
+    form.year_basic = "1986"
+    form.month_basic = "4"
+    form.day_basic = "3"
+    form.action = "/free_fortune_telling/basic_uranai.php"
     page = agent.submit(form)
 
+    @item = page.search(".bu-yado-name").text
+    binding.pry
     @items = []
-    page.search("div.search-item").each_with_index do |item, i|
-      @items << item.attr('data-name')
-    end
+    # page.search("div.search-item").each_with_index do |item, i|
+    #   @items << item.attr('data-name')
+    # end
   end
 
   private
